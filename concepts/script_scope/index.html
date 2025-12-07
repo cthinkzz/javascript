@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+
+<head>
+    <title>Delete This</title>
+    <script type="module" src="./script1.js"> </script>
+    <script type="module" src="./script2.js"> </script>
+    <script>
+        var global = 10;
+        let letGlobal = 20;
+        function hello() {
+            var global = 20;
+        }
+        console.log(global); // prints 10
+
+        function localScope() {
+            let letLocal = 30; //see where its get attached on debugger tool
+            console.log(letLocal);
+            console.log(letGlobal);
+        }
+        localScope()
+    </script>
+</head>
+
+<body>
+    <h1>This file is to be deleted</h1>
+</body>
+
+</html>
