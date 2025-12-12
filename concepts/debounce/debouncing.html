@@ -7,10 +7,9 @@
 		function someMagic(Function,delay){
 			let timerId;
 			return function(...args){
-				let context = this;
 				clearTimeout(timerId)
 				 timerId = setTimeout(() => {
-					Function.apply(context,args);
+					Function.apply(this,args);
 				}, delay);
 			}
 		}

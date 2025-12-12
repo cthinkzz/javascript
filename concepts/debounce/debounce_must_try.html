@@ -1,0 +1,28 @@
+<html>
+  <script>
+    function onChange(...args) {
+      console.log("this inside onChange ", this);
+      console.log("Calling API ");
+      console.log("printing args ", args);
+    }
+
+    function wrappedDebounce(fn, timer) {
+      let timerId = null;
+      console.log("1. THIS WILL PRINT", this); // This is printing Global
+      return function (args) {
+        clearTimeout(timerId);
+        setTimeout(function () {
+          fn.call(this, args);
+        }, timer);
+        console.log("2. THIS WILL PRINT", this); // This is also printing Global
+      };
+    }
+    const debounced = wrappedDebounce(onChange, 1000);
+  </script>
+  <body>
+    <!-- <input onkeyup="onChange()" ></input> -->
+    <!-- <input onkeyup="onChange.call(this,'hello','world')" ></input> -->
+    <!-- <input onkeyup="debounced()" ></input> -->
+    <!-- <input onkeyup="debounced.call(this)" ></input> -->
+  </body>
+</html>
