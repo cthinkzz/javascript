@@ -80,6 +80,9 @@
         let result = [];
         let responseCounter = 0;
 
+        // throw new Error("check hello"); //this also won't be caught at .catch of caller function
+        // return Promise.reject(new Error("check error catch")); // this will be caught
+
         return new Promise((resolve, reject) => {
           for (let promise of arr) {
             promise()
@@ -92,13 +95,16 @@
                 }
               })
               .catch((e) => {
-                throw e;
+                // throw e; // throw does not work, it should be handled by reject as this .catch at caller level expects asyncly thrown errors
+                // Because .catch() only catches Promise rejections, not synchronous exceptions thrown before a Promise exists.
+                reject(e);
               });
           }
         });
       }
 
       //   promiseAll();
+
       promiseAllPolifyl([promise1, promise2, promise3])
         .then((res) => {
           for (let item of res) {
@@ -106,8 +112,24 @@
           }
         })
         .catch((e) => {
-          console.log("HERE ", e);
+          console.log("caller catch", e);
+          return 4;
+        })
+        .finally((value) => {
+          console.log(value); //does not work
+          // 1. does not receive the resolved value
+          // 2. does not receive the rejection reason
+          // 3. runs purely for side effects
+          // 4. passes through the previous state unchanged
+        })
+        .then((value) => {
+          console.log(value); //here it get received
+          throw "check this is caught or not";
+        })
+        .catch((e) => {
+          console.log("This is caught here ", e);
         });
+
       //   promiseAllSettled();
       //   promiseRace();
       //   promiseAny();
