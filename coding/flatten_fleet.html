@@ -1,0 +1,88 @@
+<script>
+  const fleet = [
+    {
+      name: "Fleet1",
+      vehicles: ["v1", "v2", "v3"],
+    },
+    {
+      name: "Fleet2",
+      vehicles: ["v4", "v5"],
+      subFleet: [
+        {
+          name: "SubFleet1",
+          vehicles: ["v6"],
+          subFleet: [],
+        },
+        {
+          name: "SubFleet2",
+          vehicles: ["v7", "v8"],
+          subFleet: [],
+        },
+      ],
+    },
+    {
+      name: "Fleet3",
+      vehicles: ["v9", "v10", "v11", "v12"],
+      subFleet: [
+        {
+          name: "SubFleet3",
+          vehicles: ["v13"],
+          subFleet: [],
+        },
+      ],
+    },
+  ];
+
+  const signals = {
+    v1: "10",
+    v2: "20",
+    v3: "40",
+    v4: "100",
+    v5: "80",
+    v6: "10",
+    v7: "80",
+    v8: "60",
+    v9: "10",
+    v10: "10",
+    v11: "20",
+    v12: "40",
+    v13: "90",
+  };
+
+  function flattenFleet(fleet, signals) {
+    return fleet.map((item) => {
+      const cloned = { ...item };
+      let vehicles = cloned.vehicles || [];
+      let signalsCount = 0;
+      let vehiclesCount = vehicles.length || 0;
+      let updatedFleet = [];
+      const subFleet = cloned.subFleet;
+      if (Array.isArray(subFleet) && subFleet.length > 0) {
+        updatedFleet = flattenFleet(subFleet, signals);
+      }
+      vehicles.forEach((vehicle) => {
+        signalsCount = Number.parseInt(signals[vehicle] || "0") + signalsCount;
+      });
+
+      const { subFleetVehiclesCount, subFleetSignalsCount } =
+        updatedFleet.reduce((acc, curr) => {
+          return {
+            subFleetVehiclesCount:
+              (curr.vehiclesCount || 0) + (acc.subFleetVehiclesCount || 0),
+            subFleetSignalsCount:
+              (curr.signalsCount || 0) + (acc.subFleetSignalsCount || 0),
+          };
+        }, {});
+
+      cloned.subFleet = updatedFleet;
+      cloned.vehiclesCount =
+        (subFleetVehiclesCount || 0) + (vehiclesCount || 0);
+      cloned.signalsCount = (subFleetSignalsCount || 0) + (signalsCount || 0);
+      cloned.subFleet = updatedFleet;
+
+      return cloned;
+    });
+  }
+
+  console.log(flattenFleet(fleet, signals));
+</script>
