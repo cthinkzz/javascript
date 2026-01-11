@@ -15,6 +15,8 @@
     evalPractice();
 
     function newFuncPractice() {
+      const y = 10;
+      new Function("console.log(y)")(); //can't access local scoped variables, only Global scoped
       new Function("console.log('from new function: ', a)")();
       new Function("console.log(b+c)")();
     }
