@@ -1,0 +1,23 @@
+<html>
+  <script>
+    let a = 100;
+    var b = 200;
+    const c = 300;
+
+    function evalPractice() {
+      eval("x=10");
+      console.log(x);
+      x = 20;
+      eval("console.log('from eval x: ', x)");
+      eval("console.log('from eval a: ', a)");
+    }
+
+    evalPractice();
+
+    function newFuncPractice() {
+      new Function("console.log('from new function: ', a)")();
+      new Function("console.log(b+c)")();
+    }
+    newFuncPractice();
+  </script>
+</html>
