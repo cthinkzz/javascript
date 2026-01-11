@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <script>
+      const fetchWrapper = () => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve("API Succesfull");
+          }, 100);
+        });
+      };
+
+      async function handleChange(args1, args2) {
+        const resp = await fetchWrapper();
+        console.log(resp);
+        console.log(this);
+        console.log(Array.isArray(args1));
+        console.log(args1 + " " + args2);
+      }
+
+      function debounce(fn, delay) {
+        let timerId = null;
+        console.log("INSIDE DEBOUNCE FUNC ", this); // window
+        return function (...args) {
+          console.log("INSIDE RETURN FUNC ", this); // this must be the input as its called using .call(this)
+          clearTimeout(timerId);
+          timerId = setTimeout(() => {
+            fn.call(this, args);
+          }, delay);
+        };
+      }
+
+      const debounced = debounce(handleChange, 2000);
+
+      async function handleClick(args1, args2) {
+        const resp = await fetchWrapper();
+        console.log(resp);
+        console.log(this);
+        console.log(args1 + " " + args2);
+      }
+
+      function throttle(fn, delay) {
+        let allowCall = true;
+        return function (...args) {
+          if (allowCall) {
+            fn.apply(this, args);
+            allowCall = false;
+            setTimeout(() => {
+              allowCall = true;
+            }, delay);
+          }
+        };
+      }
+
+      const throttled = throttle(handleClick, 2000);
+    </script>
+  </head>
+  <body>
+    <input onkeypress="debounced.call(this,'hello','world')" />
+    <button onclick="throttled.call(this,'namaste','dev')">Click Me</button>
+  </body>
+</html>
