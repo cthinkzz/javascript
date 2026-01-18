@@ -9,7 +9,7 @@ export class LoggerClass {
   }
 
   log(message) {
-    console.log('Logging ', message);
+    console.log("Logging ", message);
     this.logs.push(message);
   }
 }
@@ -28,7 +28,7 @@ class LoggerSingleton {
   }
 
   log(message) {
-    console.log('Logging ', message);
+    console.log("Logging ", message);
     this.logs.push(message);
   }
 }
@@ -37,10 +37,28 @@ Object.freeze(logger); // freezing the object so that no one can modify the prop
 // LoggerSingleton.prototype.newAttribute = 'New Attribute'; //this will error out as object is freezed
 export { logger };
 
-// LoggerSingleton.prototype.newAttribute = 'New Attribute';
-// const logger = new LoggerSingleton();
-// console.log(logger.newAttribute)
-// // not able to see newAttribute in log as its added using prototype
-// console.log(logger)
-// console.log(Object.getOwnPropertyNames(logger));
-// console.log(Object.getOwnPropertyDescriptors(logger));
+LoggerSingleton.prototype.newAttribute = "New Attribute";
+const logger1 = new LoggerSingleton();
+console.log(logger.newAttribute);
+// not able to see newAttribute in log as its added using prototype
+console.log(logger);
+console.log(Object.getOwnPropertyNames(logger));
+console.log(Object.getOwnPropertyDescriptors(logger));
+
+class SingleTonClass {
+  constructor() {
+    this.connection = "connection-obj";
+  }
+
+  static getInstance() {
+    if (!SingleTonClass.instance) {
+      SingleTonClass.instance = new SingleTonClass();
+    }
+    return SingleTonClass.instance;
+  }
+}
+
+const firstClient = SingleTonClass.getInstance();
+const secondClient = SingleTonClass.getInstance();
+
+console.log(firstClient === secondClient); // true
